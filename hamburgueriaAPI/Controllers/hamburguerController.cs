@@ -38,7 +38,7 @@ namespace hamburgueriaAPI.Controllers
         public List<Hamburger> GetBurgers()
         {
             //var response = _context.Ingredient.Where(i => i.Id == id).Select(i => new Ingredient { Id = i.Id, Ingrediente = i.Ingrediente, Preco = i.Preco }).ToList().FirstOrDefault();
-            var response = _context.Hamburger.Include(t => t.Ingredientes).ToList();
+            var response = _context.Hamburger.Include(t => t.ingredients).ToList();
             return response;
         }
 
