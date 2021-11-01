@@ -8,6 +8,6 @@ namespace HamburgerModel
     {
         public int id { get; set; }
         public String name { get; set; }
-        public ICollection<Ingredient> Ingredientes { get; set; }
+        public List<Ingredient> ingredients { get; set; }
     }
 }

@@ -76,6 +76,11 @@ namespace hamburgueriaAPI
 
         }
 
+        private static Ingredient CloneIngredient(Ingredient ingredient)
+        {
+            return new Ingredient { id = ingredient.id, name = ingredient.name, price = ingredient.price, quantity = 1 };
+        }
+
         private static void AddMockupData(ApiContext context)
         {
             var alface = new Ingredient
@@ -126,22 +131,54 @@ namespace hamburgueriaAPI
 
             context.SaveChanges();
 
-            var ingredientes = new List<Ingredient>();
-
-            ingredientes.Add(bacon);
-            ingredientes.Add(alface);
 
             var xBacon = new Hamburger
             {
                 id = 1,
                 name = "X-Bacon",
-                Ingredientes = ingredientes
+                ingredients = new List<Ingredient> { CloneIngredient(bacon), CloneIngredient(burger) }
+            };
+
+            var xBurger = new Hamburger
+            {
+                id = 2,
+                name = "X-Burger",
+                ingredients = new List<Ingredient> { CloneIngredient(burger), CloneIngredient(cheese) }
             };
 
             context.Hamburger.Add(xBacon);
-
+            context.Hamburger.Add(xBurger);
             context.SaveChanges();
+/*
+           // mockIngredients.Clear();
+            mockIngredients.Add(cheese);
+            mockIngredients.Add(burger);
+            mockIngredients.Add(egg);
 
+            var xEgg = new Hamburger
+            {
+                id = 3,
+                name = "X-Egg",
+                ingredients = mockIngredients
+            };
+
+            context.Hamburger.Add(xEgg);
+            context.SaveChanges();
+            //mockIngredients.Clear();
+            mockIngredients.Add(cheese);
+            mockIngredients.Add(burger);
+            mockIngredients.Add(egg);
+            mockIngredients.Add(bacon);
+
+            var xEggBacon = new Hamburger
+            {
+                id = 4,
+                name = "X-Egg Bacon",
+                ingredients = mockIngredients
+            };
+
+            context.Hamburger.Add(xEggBacon);
+            context.SaveChanges();*/
         }
 
     }
