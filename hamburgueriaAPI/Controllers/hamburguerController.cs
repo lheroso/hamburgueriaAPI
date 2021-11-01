@@ -13,13 +13,7 @@ namespace hamburgueriaAPI.Controllers
 {
     [ApiController]
     public class hamburguerController : ControllerBase
-    {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
-        
+    {    
 
         private readonly ILogger<hamburguerController> _logger;
 
@@ -46,6 +40,28 @@ namespace hamburgueriaAPI.Controllers
             //var response = _context.Ingredient.Where(i => i.Id == id).Select(i => new Ingredient { Id = i.Id, Ingrediente = i.Ingrediente, Preco = i.Preco }).ToList().FirstOrDefault();
             var response = _context.Hamburger.ToList();
             return response;
+        }
+
+        [HttpPost]
+        [Route("/getDiscount")]
+        public double GetDiscount(List<Ingredient> ingredients)
+        {
+            double price = ingredients.Sum(items => items.price * items.quantity);
+            double discount = 0;
+
+            //Regra de disconto = "Muita Carne"
+            var ingredientBurger = ingredients.Find(item => item.id == 3);
+            discount = discount + Convert.ToInt32(ingredientBurger.quantity/3) * ingredientBurger.price ;
+            //Regra de disconto = "Muito Queijo"
+            var ingredientCheese = ingredients.Find(item => item.id == 5);
+            discount = discount + Convert.ToInt32(ingredientCheese.quantity / 3) * ingredientCheese.price;
+            //Regra de disconto = "Light"
+            if (ingredients.Find(item => item.id == 1).quantity > 0 &&
+                ingredients.Find(item => item.id == 2).quantity == 0)
+                discount = ((price-discount) * 0.1) + discount;
+
+            return discount;
+
         }
 
     }
