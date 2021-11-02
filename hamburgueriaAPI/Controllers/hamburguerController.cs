@@ -37,27 +37,47 @@ namespace hamburgueriaAPI.Controllers
         [Route("/getBurgers")]
         public List<Hamburger> GetBurgers()
         {
-            //var response = _context.Ingredient.Where(i => i.Id == id).Select(i => new Ingredient { Id = i.Id, Ingrediente = i.Ingrediente, Preco = i.Preco }).ToList().FirstOrDefault();
-            var response = _context.Hamburger.Include(t => t.ingredients).ToList();
+            //var response = _context.Hamburger.Include(t => t.Ingredients).ToList();
+            //var response = _context.Hamburger.SelectMany(i => i.HamburgerIngredient).Select(h => h.Hamburger).ToList();
+            var response = _context.Hamburger.ToList();
+
+            
             return response;
+        }
+        
+        [HttpGet]
+        [Route("/getBurgerIngredients")]
+        public List<Ingredient> GetBurgerIngredients(int hid)
+        {
+            var hamburgers = _context.HamburgerIngredients.Where(hi => hi.HamburgerID == hid).ToList();
+
+            var hamburgersIngredients = new List<Ingredient>();
+
+            foreach (var hamburger in hamburgers)
+            {
+                hamburgersIngredients.Add(_context.Ingredient.Where(i => i.IngredientID == hamburger.IngredientID)
+                    .FirstOrDefault());
+            }
+
+            return hamburgersIngredients;
         }
 
         [HttpPost]
         [Route("/getDiscount")]
-        public double GetDiscount(List<Ingredient> ingredients)
+        public double GetDiscount(List<HamburgerIngredient> ingredients)
         {
-            double price = ingredients.Sum(items => items.price * items.quantity);
+            double price = ingredients.Sum(items => items.Ingredient.Price * items.IngredientQuantity);
             double discount = 0;
 
             //Regra de disconto = "Muita Carne"
-            var ingredientBurger = ingredients.Find(item => item.id == 3);
-            discount = discount + Convert.ToInt32(ingredientBurger.quantity/3) * ingredientBurger.price ;
+            var ingredientBurger = ingredients.Find(item => item.IngredientID == 3);
+            discount = discount + Convert.ToInt32(ingredientBurger.IngredientQuantity/3) * ingredientBurger.Ingredient.Price ;
             //Regra de disconto = "Muito Queijo"
-            var ingredientCheese = ingredients.Find(item => item.id == 5);
-            discount = discount + Convert.ToInt32(ingredientCheese.quantity / 3) * ingredientCheese.price;
+            var ingredientCheese = ingredients.Find(item => item.IngredientID == 5);
+            discount = discount + Convert.ToInt32(ingredientCheese.IngredientQuantity / 3) * ingredientCheese.Ingredient.Price;
             //Regra de disconto = "Light"
-            if (ingredients.Find(item => item.id == 1).quantity > 0 &&
-                ingredients.Find(item => item.id == 2).quantity == 0)
+            if (ingredients.Find(item => item.IngredientID == 1).IngredientQuantity > 0 &&
+                ingredients.Find(item => item.IngredientID == 2).IngredientQuantity == 0)
                 discount = ((price-discount) * 0.1) + discount;
 
             return discount;

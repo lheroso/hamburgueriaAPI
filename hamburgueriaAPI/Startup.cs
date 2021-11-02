@@ -80,42 +80,37 @@ namespace hamburgueriaAPI
         {
             var alface = new Ingredient
             {
-                id = 1,
-                name = "Alface",
-                price = 0.4,
-                quantity = 0
+                IngredientID = 1,
+                Name = "Alface",
+                Price = 0.4
             };
 
             var bacon = new Ingredient
             {
-                id = 2,
-                name = "Bacon",
-                price = 2,
-                quantity = 0
+                IngredientID = 2,
+                Name = "Bacon",
+                Price = 2
             };
 
             var burger = new Ingredient
             {
-                id = 3,
-                name = "Hamburguer de carne",
-                price = 3,
-                quantity = 0
+                IngredientID = 3,
+                Name = "Hamburguer de carne",
+                Price = 3
             };
 
             var egg = new Ingredient
             {
-                id = 4,
-                name = "Ovo",
-                price = 0.8,
-                quantity = 0
+                IngredientID = 4,
+                Name = "Ovo",
+                Price = 0.8
             };
 
             var cheese = new Ingredient
             {
-                id = 5,
-                name = "Queijo",
-                price = 1.5,
-                quantity = 0
+                IngredientID = 5,
+                Name = "Queijo",
+                Price = 1.5
             };
 
             context.Ingredient.Add(alface);
@@ -123,23 +118,74 @@ namespace hamburgueriaAPI
             context.Ingredient.Add(burger);
             context.Ingredient.Add(egg);
             context.Ingredient.Add(cheese);
-
-            context.SaveChanges();
-
-            var ingredientes = new List<Ingredient>();
-
-            ingredientes.Add(bacon);
-            ingredientes.Add(alface);
             
             var xBacon = new Hamburger
             {
-                id = 1,
-                name = "X-Bacon",
-                Ingredientes = ingredientes
+                HamburgerID = 1,
+                Name = "X-Bacon"
+                
             };
 
             context.Hamburger.Add(xBacon);
+            
+            var xEgg = new Hamburger
+            {
+                HamburgerID = 2,
+                Name = "X-Egg"
+                
+            };
 
+            context.Hamburger.Add(xEgg);
+
+            var relation1 = new HamburgerIngredient()
+            {
+                HamburgerID = 1,
+                IngredientID = 2,
+                IngredientQuantity = 1
+            };
+            
+            var relation2 = new HamburgerIngredient()
+            {
+                HamburgerID = 1,
+                IngredientID = 3,
+                IngredientQuantity = 1
+            };
+            
+            var relation3 = new HamburgerIngredient()
+            {
+                HamburgerID = 1,
+                IngredientID = 4,
+                IngredientQuantity = 1
+            };
+            
+            var relation4 = new HamburgerIngredient()
+            {
+                HamburgerID = 2,
+                IngredientID = 3,
+                IngredientQuantity = 1
+            };
+            
+            var relation5 = new HamburgerIngredient()
+            {
+                HamburgerID = 2,
+                IngredientID = 2,
+                IngredientQuantity = 1
+            };
+            
+            var relation6 = new HamburgerIngredient()
+            {
+                HamburgerID = 2,
+                IngredientID = 1,
+                IngredientQuantity = 1
+            };
+
+            context.HamburgerIngredients.Add(relation1);
+            context.HamburgerIngredients.Add(relation2);
+            context.HamburgerIngredients.Add(relation3);
+            context.HamburgerIngredients.Add(relation4);
+            context.HamburgerIngredients.Add(relation5);
+            context.HamburgerIngredients.Add(relation6);
+            
             context.SaveChanges();
 
         }
